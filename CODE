@@ -1,0 +1,172 @@
+#include "BluetoothSerial.h"
+#include <ESP32Servo.h>
+
+BluetoothSerial SerialBT;
+Servo frontServo;
+
+// --- PINS ---
+const int IN1 = 25, IN2 = 26, IN3 = 27, IN4 = 14;
+const int F_TRIG = 32, F_ECHO = 35;
+const int R_TRIG = 33, R_ECHO = 34;
+const int IR_LEFT = 4, IR_RIGHT = 5;
+const int SERVO_PIN = 13;
+const int BUZZER = 18;
+const int HEADLIGHT = 16;
+const int BACKLIGHT = 17;
+
+// --- VARIABLES ---
+char mode = 'M'; 
+String command = "S";
+String btBuffer = ""; // Fast command storage
+unsigned long lastSensorTime = 0;
+const int sensorInterval = 80; 
+long fDist = 100, rDist = 100;
+
+void setup() {
+  Serial.begin(115200);
+  SerialBT.begin("ESP32_Final_Robot");
+  
+  pinMode(IN1, OUTPUT); pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT); pinMode(IN4, OUTPUT);
+  pinMode(F_TRIG, OUTPUT); pinMode(F_ECHO, INPUT);
+  pinMode(R_TRIG, OUTPUT); pinMode(R_ECHO, INPUT);
+  pinMode(IR_LEFT, INPUT); pinMode(IR_RIGHT, INPUT);
+  pinMode(BUZZER, OUTPUT);
+  pinMode(HEADLIGHT, OUTPUT);
+  pinMode(BACKLIGHT, OUTPUT);
+  
+  frontServo.attach(SERVO_PIN);
+  frontServo.write(90);
+  stopMotors();
+}
+
+long getDistance(int trig, int echo) {
+  digitalWrite(trig, LOW); delayMicroseconds(2);
+  digitalWrite(trig, HIGH); delayMicroseconds(10);
+  digitalWrite(trig, LOW);
+  long duration = pulseIn(echo, HIGH, 12000); // Timeout kam kar diya hai fast response ke liye
+  if (duration == 0) return 400;
+  return duration * 0.034 / 2;
+}
+
+void loop() {
+  // 1. NON-BLOCKING BLUETOOTH READING (Sabse Tez)
+  while (SerialBT.available()) {
+    char c = (char)SerialBT.read();
+    if (c == '\n' || c == '\r') {
+      processCommand(btBuffer);
+      btBuffer = ""; // Buffer clear
+    } else {
+      btBuffer += c;
+      // Agar single char command hai (M, A, X, P, F, B, L, R, S)
+      if (btBuffer.length() == 1 && (btBuffer == "M" || btBuffer == "A" || btBuffer == "X" || btBuffer == "P" || 
+          btBuffer == "F" || btBuffer == "B" || btBuffer == "L" || btBuffer == "R" || btBuffer == "S")) {
+        processCommand(btBuffer);
+        btBuffer = "";
+      }
+      // Agar double char command hai (H1, H2, h1, h2)
+      else if (btBuffer.length() == 2) {
+        processCommand(btBuffer);
+        btBuffer = "";
+      }
+    }
+  }
+
+  // 2. Sensor Update (Background mein)
+  if (millis() - lastSensorTime >= sensorInterval) {
+    lastSensorTime = millis();
+    fDist = getDistance(F_TRIG, F_ECHO);
+    rDist = getDistance(R_TRIG, R_ECHO);
+  }
+
+  // 3. Modes Execution
+  if (mode == 'M') handleManual();
+  else if (mode == 'A') handleAuto();
+  else if (mode == 'X') handleLineFollower();
+  else if (mode == 'P') handleSmartParking();
+}
+
+// --- FAST COMMAND PROCESSOR ---
+void processCommand(String cmd) {
+  cmd.trim();
+  if (cmd == "M" || cmd == "A" || cmd == "X" || cmd == "P") {
+    mode = cmd[0];
+    stopMotors();
+  } 
+  else if (cmd == "H1") digitalWrite(HEADLIGHT, HIGH);
+  else if (cmd == "H2") digitalWrite(HEADLIGHT, LOW);
+  else if (cmd == "h1") digitalWrite(BUZZER, HIGH);
+  else if (cmd == "h2") digitalWrite(BUZZER, LOW);
+  else if (cmd.length() == 1) {
+    command = cmd;
+  }
+}
+
+// --- MODES (Bina extra delay ke) ---
+void handleManual() {
+  if (command == "F") {
+    if (fDist < 20) stopMotors();
+    else { moveForward(); digitalWrite(BACKLIGHT, LOW); }
+  } 
+  else if (command == "B") {
+    if (rDist < 20) stopMotors();
+    else { moveBackward(); digitalWrite(BACKLIGHT, LOW); }
+  }
+  else if (command == "L") { turnLeft(); digitalWrite(BACKLIGHT, LOW); }
+  else if (command == "R") { turnRight(); digitalWrite(BACKLIGHT, LOW); }
+  else if (command == "S") stopMotors();
+}
+
+void handleAuto() {
+  if (fDist < 25) {
+    stopMotors();
+    frontServo.write(30); delay(300);
+    int dL = getDistance(F_TRIG, F_ECHO);
+    frontServo.write(150); delay(300);
+    int dR = getDistance(F_TRIG, F_ECHO);
+    frontServo.write(90);
+    if (dL > dR) { turnLeft(); delay(400); } else { turnRight(); delay(400); }
+    stopMotors();
+  } else { moveForward(); digitalWrite(BACKLIGHT, LOW); }
+}
+
+void handleLineFollower() {
+  int L = digitalRead(IR_LEFT);
+  int R = digitalRead(IR_RIGHT);
+  if (L == LOW && R == LOW) { moveForward(); digitalWrite(BACKLIGHT, LOW); }
+  else if (L == HIGH && R == LOW) { turnLeft(); digitalWrite(BACKLIGHT, LOW); }
+  else if (L == LOW && R == HIGH) { turnRight(); digitalWrite(BACKLIGHT, LOW); }
+  else stopMotors();
+}
+
+void handleSmartParking() {
+  stopMotors();
+  int maxDist = 0, bestAngle = 90;
+  for (int a = 30; a <= 150; a += 40) {
+    frontServo.write(a); delay(150);
+    int d = getDistance(F_TRIG, F_ECHO);
+    if (d > maxDist) { maxDist = d; bestAngle = a; }
+  }
+  frontServo.write(90);
+  if (bestAngle < 80) { turnLeft(); delay(500); } 
+  else if (bestAngle > 100) { turnRight(); delay(500); }
+  stopMotors();
+
+  while (mode == 'P') {
+    long d = getDistance(R_TRIG, R_ECHO);
+    if (d > 8 && d < 150) { moveBackward(); digitalWrite(BACKLIGHT, LOW); } 
+    else if (d <= 8) { stopMotors(); mode = 'M'; break; }
+    if (SerialBT.available()) break; 
+  }
+}
+
+// --- MOVEMENT ---
+void moveForward() { digitalWrite(IN1, HIGH); digitalWrite(IN2, LOW); digitalWrite(IN3, HIGH); digitalWrite(IN4, LOW); }
+void moveBackward() { digitalWrite(IN1, LOW); digitalWrite(IN2, HIGH); digitalWrite(IN3, LOW); digitalWrite(IN4, HIGH); }
+void turnLeft() { digitalWrite(IN1, LOW); digitalWrite(IN2, HIGH); digitalWrite(IN3, HIGH); digitalWrite(IN4, LOW); }
+void turnRight() { digitalWrite(IN1, HIGH); digitalWrite(IN2, LOW); digitalWrite(IN3, LOW); digitalWrite(IN4, HIGH); }
+void stopMotors() { 
+  digitalWrite(IN1, LOW); digitalWrite(IN2, LOW); 
+  digitalWrite(IN3, LOW); digitalWrite(IN4, LOW); 
+  digitalWrite(BACKLIGHT, HIGH);
+}
