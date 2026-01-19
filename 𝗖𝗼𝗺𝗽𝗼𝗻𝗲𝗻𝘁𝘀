@@ -1,0 +1,42 @@
+𝟭.𝗠𝗮𝗶𝗻 𝗕𝗿𝗮𝗶𝗻 (𝗠𝗶𝗰𝗿𝗼𝗰𝗼𝗻𝘁𝗿𝗼𝗹𝗹𝗲𝗿)
+𝗘𝗦𝗣𝟯𝟮 𝟯𝟴𝗽𝗶𝗻: Yeh car ka dimag hai. Isme built-in Bluetooth aur WiFi hai, jo aapko wireless control aur fast processing provide karta hai.
+
+𝟮. 𝗦𝗲𝗻𝘀𝗼𝗿𝘀 (𝗘𝘆𝗲𝘀 𝗼𝗳 𝘁𝗵𝗲 𝗖𝗮𝗿)
+𝟮× 𝗛𝗖-𝗦𝗥𝟬𝟰 𝗨𝗹𝘁𝗿𝗮𝘀𝗼𝗻𝗶𝗰 𝗦𝗲𝗻𝘀𝗼𝗿𝘀: * Ek Front mein (Servo par mounted) rasta dhoondne ke liye.
+
+Ek Rear mein parking aur piche ki safety ke liye.
+
+𝟮× 𝗜𝗥 𝗦𝗲𝗻𝘀𝗼𝗿𝘀 (𝗗𝗶𝗴𝗶𝘁𝗮𝗹): Car ke neeche ki taraf, black line ko detect karke Line Following karne ke liye.
+
+𝟯. 𝗔𝗰𝘁𝘂𝗮𝘁𝗼𝗿𝘀 & 𝗠𝗼𝘁𝗼𝗿𝘀 (𝗠𝗼𝘃𝗲𝗺𝗲𝗻𝘁)
+𝟰× 𝗗𝗖 𝗚𝗲𝗮𝗿 𝗠𝗼𝘁𝗼𝗿𝘀 (𝟮𝟬𝟬 𝗥𝗣𝗠): Car ke charon pahiya (wheels) ghumane ke liye.
+
+𝟭x 𝗦𝗚𝟵𝟬 𝗦𝗲𝗿𝘃𝗼 𝗠𝗼𝘁𝗼𝗿: Front ultrasonic sensor ko 180° ghumane ke liye taaki car side ka rasta dekh sake.
+
+𝟰. 𝗠𝗼𝘁𝗼𝗿 𝗗𝗿𝗶𝘃𝗲𝗿
+𝗟𝟮𝟵𝟴𝗡 𝗗𝘂𝗮𝗹 𝗛-𝗕𝗿𝗶𝗱𝗴𝗲 𝗠𝗼𝘁𝗼𝗿 𝗗𝗿𝗶𝘃𝗲𝗿: ESP32 se signal lekar motors ko power dene ke liye. Yeh motors ki direction aur speed control karta hai.
+
+𝟱. 𝗘𝗹𝗲𝗰𝘁𝗿𝗼𝗻𝗶𝗰𝘀 & 𝗜𝗻𝗱𝗶𝗰𝗮𝘁𝗼𝗿𝘀
+𝗛𝗶𝗴𝗵-𝗜𝗻𝘁𝗲𝗻𝘀𝗶𝘁𝘆 𝗪𝗵𝗶𝘁𝗲 𝗟𝗘𝗗𝘀: Car ki Headlights ke liye.
+
+𝗥𝗲𝗱 𝗟𝗘𝗗𝘀: Car ki Brake Lights ke liye jo rukne par automatic jalti hain.
+
+𝗔𝗰𝗿𝗶𝘃 𝗕𝘂𝘇𝘇𝗲𝗿: Car ke Horn aur parking alerts ke liye.
+
+𝗥𝗲𝘀𝗶𝘀𝘁𝗼𝗿𝘀 (𝟮𝟮𝟬-𝗼𝗵𝗺): LEDs ko excess current se bachane ke liye.
+
+𝟲. 𝗣𝗼𝘄𝗲𝗿 𝗦𝘂𝗽𝗽𝗹𝘆
+𝟯 𝘁𝗼 𝟰 - 𝟭𝟴𝟲𝟱𝟬 𝗟𝗶-𝗶𝗼𝗻 𝗖𝗲𝗹𝗹𝘀 (𝟯.𝟳𝗩 𝗲𝗮𝗰𝗵):jo ESP32 aur motors dono ko power dete hain. (Sabse best power source aapke setup ke liye).
+
+𝗦𝘄𝗶𝘁𝗰𝗵: Car ko ON/OFF karne ke liye.
+
+𝟳. 𝗖𝗵𝗮𝘀𝘀𝗶𝘀 & 𝗕𝗼𝗱𝘆
+4-Wheel Robot Chassis: Jispar saara hardware mounted hai.
+
+4x Rubber Wheels: Behtar grip ke liye.
+
+𝗝𝘂𝗺𝗽𝗲𝗿 𝗪𝗶𝗿𝗲𝘀 (𝗠𝗮𝗹𝗲-𝘁𝗼-𝗠𝗮𝗹𝗲, 𝗠𝗮𝗹𝗲-𝘁𝗼-𝗙𝗲𝗺𝗮𝗹𝗲): Saare components ko aapas mein jodne ke liye.
+
+𝗕𝗿𝗲𝗮𝗱𝗯𝗼𝗮𝗿𝗱 (𝗢𝗽𝘁𝗶𝗼𝗻𝗮𝗹): Agar aapne wires ko soldering nahi kiya hai toh.
+
+Cardboard: Aapka custom-made 3-side covered parking slot.
