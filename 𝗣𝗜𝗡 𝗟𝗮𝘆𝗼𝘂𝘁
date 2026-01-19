@@ -1,0 +1,25 @@
+Component,Pin Function,ESP32 GPIO Pin,Description
+L298N Driver
+𝗜𝗡𝟭 (Motor right front),GPIO 𝟮𝟱,Left Motors Control
+𝗜𝗡𝟮 (Motor right rear),GPIO 𝟮𝟲,Left Motors Control
+𝗜𝗡𝟯 (Motor left front),GPIO 𝟮𝟳,Right Motors Control
+𝗜𝗡𝟰 (Motor left rear),GPIO 𝟭𝟰,Right Motors Control
+
+𝗙𝗿𝗼𝗻𝘁 𝗨𝗹𝘁𝗿𝗮𝘀𝗼𝗻𝗶𝗰
+Trig,GPIO 𝟯𝟮,Distance Measurement (Front)
+Echo,GPIO 𝟯𝟱,Distance Measurement (Front)
+𝗥𝗲𝗮𝗿 𝗨𝗹𝘁𝗿𝗮𝘀𝗼𝗻𝗶𝗰
+Trig,GPIO 𝟯𝟯,Distance Measurement (Rear)
+Echo,GPIO 𝟯𝟰,Distance Measurement (Rear)
+
+𝗦𝗲𝗿𝘃𝗼 𝗠𝗼𝘁𝗼𝗿
+Signal,GPIO 𝟭𝟯, Front Ultrasonic Sensor Rotation
+
+𝗜𝗥 𝗦𝗲𝗻𝘀𝗼𝗿𝘀
+Left Sensor,GPIO 𝟰,Line Tracking (Left)
+Right Sensor,GPIO 𝟱,Line Tracking (Right)
+
+𝗟𝗶𝗴𝗵𝘁𝘀 & 𝗛𝗼𝗿𝗻
+𝗛𝗲𝗮𝗱𝗹𝗶𝗴𝗵𝘁 (+),GPIO 𝟭𝟲,Front White LEDs
+𝗕𝗿𝗮𝗸𝗲 𝗟𝗶𝗴𝗵𝘁 (+),GPIO 𝟭𝟳,Rear Red LEDs
+𝗕𝘂𝘇𝘇𝗲𝗿 (+),GPIO 𝟭𝟴,Horn & Alerts
