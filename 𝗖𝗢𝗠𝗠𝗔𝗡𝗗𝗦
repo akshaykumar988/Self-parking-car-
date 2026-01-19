@@ -1,0 +1,18 @@
+Category	     Command      	Action	          Description
+Modes	           
+                M	            Manual Mode	      Aap car ko khud control karenge.
+                A	            Auto Mode	        Car obstacle avoid karke khud chalegi.
+                X	            Line Follower  	  Car black line ko follow karegi.
+                P	            Smart Parking	    Car slot scan karke reverse park hogi.
+Movement	
+                F	            Forward	          Car aage jayegi (Safety active).
+                B	            Backward	        Car piche jayegi (Safety active).
+                L	            Left	            Car left muregi.
+                R	            Right	            Car right muregi.
+                S	            Stop	            Car ruk jayegi + Brake Lights ON.
+Lights	
+                H1	          Headlight ON	    Front white LEDs jal jayengi.
+                H2          	Headlight OFF	    Front white LEDs band ho jayengi.
+Sound	
+                h1	          Horn ON	          Buzzer bajna shuru hoga.
+                hh2           Horn OFF       	  Buzzer band ho jayega.
